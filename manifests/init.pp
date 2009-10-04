@@ -4,6 +4,10 @@ class common::ubuntu {
     "apt get update":
       command => "/usr/bin/apt-get update";
   }
+  file {
+    "/var/local/preseed":
+     ensure => directory;
+  }
 
 }
 define preseed_package ( $ensure, $module) {
@@ -12,6 +16,7 @@ define preseed_package ( $ensure, $module) {
     source => "puppet:///${module}/var/local/preseed/$name.preseed",
     mode => 600,
     backup => false,
+    require => File["/var/local/preseed"];
   }
 
   package { "$name":
